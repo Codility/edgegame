@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
+import { createGraph } from './graph';
 
-const GRAPH = {
+const EDGES = [
+  ['computer', 'keyboard'],
+  ['computer', 'programming'],
+  ['keyboard', 'programming'],
+];
+
+
+const GRAPH = createGraph(EDGES);
+
+/* {
   nodes: [
     { name: 'technology', x: 250, y: 250 },
     { name: 'computer', x: 100, y: 250 },
@@ -16,9 +26,10 @@ const GRAPH = {
 
 /*    ['steve jobs']
     ['elon musk']
-    ['nicola tesla']*/
+    ['nicola tesla']
   ],
 };
+*/
 
 export default class App extends Component {
   constructor(props) {
