@@ -154,17 +154,32 @@ function BoardNode({name, x, y, state}) {
     return <g />;
   }
 
-  let h = 20, w = name.length * 10, padding = 5;
-
   let color = 'white';
   if (state == 'guessed') color = 'yellow';
 
   if (state != 'guessed')
     name = name.replace(/[^ ]/g, '*');
+
+  let lines = name.split(' ');
+
+  let maxLength = 0;
+  for (let s of lines) {
+    maxLength = Math.max(s.length, maxLength);
+  }
+
+  let hLine = 20;
+  let h = hLine * lines.length;
+  let w = maxLength * 10;
+  let padding = 5;
+
+  function makeText(s, i) {
+    return <text x={x-w/2} y={y-h/2+3*hLine/4+i*hLine} fontFamily="monospace" fontSize="16">{s}</text>;
+  }
+
   return (
     <g>
       <rect x={x-w/2-padding} y={y-h/2} width={w+padding*2} height={h} stroke="black" fill={color} strokeWidth="2" />
-      <text x={x-w/2} y={y+h/4} fontFamily="monospace" fontSize="16">{name}</text>
+      {lines.map(makeText)}
     </g>
   );
 }
