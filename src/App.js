@@ -70,7 +70,7 @@ export default class App extends Component {
     return (
       <div>
 	<div><Board graph={GRAPH} nodeStates={this.state.nodeStates} /></div>
-	<div><input value={this.state.currentName} onChange={this.changeInput.bind(this)} /></div>
+	<div><input value={this.state.currentName} onChange={this.changeInput.bind(this)} onKeyDown={this.keyDown.bind(this)} /></div>
       </div>
     );
   }
@@ -80,28 +80,31 @@ export default class App extends Component {
     this.setState({currentName: currentName});
   }
 
+  keyDown(e) {
+    if (e.keyCode == 13) {
+      this.guess(this.state.currentName);
+      this.setState({currentName: ''});
+    }
+  }
+
   guess(name) {
-    if (!(GRAPH.nodeMap[name] && this.getNodeState(name) == 'visible')) {
-      console.log('not guessing', name);
+    if (!(GRAPH.nodeMap[name] && this.state.nodeStates[name] == 'visible')) {
       return;
     }
 
-    console.log('guessing', name);
-    this.setNodeState(name, 'guessed');
+    let nodeStates = Object.assign({}, this.state.nodeStates);
 
-    let nodeStates = Object.assign({}, nodeStates);
+    nodeStates[name] = 'guessed';
+
     for (let [name1, name2] of GRAPH.edges) {
       if (name1 == name || name2 == name) {
 	let otherName = name == name1 ? name2 : name1;
 
-        nodeStates[otherName] = 'visible';
+	if (nodeStates[otherName] === undefined)
+	  nodeStates[otherName] = 'visible';
       }
     }
     this.setState({nodeStates: nodeStates});
-  }
-
-  getNodeState(name) {
-    return this.state.nodeStates[name] || null;
   }
 }
 
@@ -153,13 +156,11 @@ function BoardNode({name, x, y, state}) {
 
   let h = 20, w = name.length * 10, padding = 5;
 
-  let color;
-  if (state == 'visible') color = 'yellow';
-  else if (state == 'guessed') color = 'red';
+  let color = 'white';
+  if (state == 'guessed') color = 'yellow';
 
   if (state != 'guessed')
     name = name.replace(/[^ ]/g, '*');
-
   return (
     <g>
       <rect x={x-w/2-padding} y={y-h/2} width={w+padding*2} height={h} stroke="black" fill={color} strokeWidth="2" />
