@@ -32,7 +32,14 @@ export function createGraph(edges, width, height) {
     });
   });
 
+  let nodeMap = {};
+  for (let node of nodes) {
+    nodeMap[node.name] = node;
+  }
+
   return {
+    names: names,
+    nodeMap: nodeMap,
     nodes: nodes,
     edges: edges,
   };
