@@ -112,7 +112,13 @@ class Board extends Component {
     return (
       <svg width={WIDTH} height={HEIGHT}>
         <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
-        {graph.edges.map(([name1, name2], i) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} key={i} />)}
+        {graph.edges.map(([name1, name2], i) =>
+                         <BoardEdge name1={name1}
+                                    name2={name2}
+                                    state1={nodeStates[name1]}
+                                    state2={nodeStates[name2]}
+                                    nodes={graph.nodes}
+                                    key={i} />)}
         {graph.nodes.map(({name, x, y}, i) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} key={i} />)}
       </svg>
     );
@@ -129,18 +135,31 @@ function getNode(nodes, name) {
   throw new Error(`There is no such node: ${name}.`);
 }
 
-function BoardEdge({name1, name2, nodes}) {
+function BoardEdge({name1, name2, state1, state2, nodes}) {
+  if (!(state1 && state2))
+    return <g />;
+
   let n1 = getNode(nodes, name1), n2 = getNode(nodes, name2);
+
   return (
     <line x1={n1.x} y1={n1.y} x2={n2.x} y2={n2.y} stroke="black" strokeWidth="1" />
   );
 }
 
 function BoardNode({name, x, y, state}) {
+  if (!state) {
+    return <g />;
+  }
+
   let h = 20, w = name.length * 10, padding = 5;
-  let color = 'white';
+
+  let color;
   if (state == 'visible') color = 'yellow';
   else if (state == 'guessed') color = 'red';
+
+  if (state != 'guessed')
+    name = name.replace(/[^ ]/g, '*');
+
   return (
     <g>
       <rect x={x-w/2-padding} y={y-h/2} width={w+padding*2} height={h} stroke="black" fill={color} strokeWidth="2" />
