@@ -62,16 +62,22 @@ export default class App extends Component {
     this.state = {
       nodeStates: {
         'technology': 'visible'
-      }
+      },
+      currentName: '',
     };
   }
   render() {
     return (
       <div>
-	<Board graph={GRAPH} nodeStates={this.state.nodeStates} />
-	<input onChange="" />
+	<div><Board graph={GRAPH} nodeStates={this.state.nodeStates} /></div>
+	<div><input value={this.state.currentName} onChange={this.changeInput.bind(this)} /></div>
       </div>
     );
+  }
+
+  changeInput(e) {
+    let currentName = e.target.value;
+    this.setState({currentName: currentName});
   }
 
   guess(name) {
@@ -105,14 +111,20 @@ export default class App extends Component {
 }
 
 
-function Board({graph, nodeStates}) {
-  return (
-    <svg width={WIDTH} height={WIDTH}>
-      <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
-      {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
-      {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} />)}
-    </svg>
-  );
+class Board extends Component {
+  render() {
+    let {graph, nodeStates} = this.props;
+    return (
+      <svg width={WIDTH} height={HEIGHT}>
+        <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
+        {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
+        {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} />)}
+      </svg>
+    );
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps !== this.props;
+  }
 }
 
 function getNode(nodes, name) {
