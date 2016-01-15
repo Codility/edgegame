@@ -52,7 +52,9 @@ const EDGES = [
 ];
 
 
-const GRAPH = createGraph(EDGES);
+const WIDTH = 1000, HEIGHT = 800;
+
+const GRAPH = createGraph(EDGES, WIDTH, HEIGHT);
 
 export default class App extends Component {
   constructor(props) {
@@ -96,8 +98,8 @@ export default class App extends Component {
 
 function Board({graph}) {
   return (
-    <svg width="500" height="500">
-      <rect x="0" y="0" width="500" height="500" stroke="black" fill="white" strokeWidth="2"/>
+    <svg width={WIDTH} height={WIDTH}>
+      <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
       {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
       {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={this.state.nodeStates[name]} />)}
     </svg>
