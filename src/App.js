@@ -89,24 +89,19 @@ export default class App extends Component {
     console.log('guessing', name);
     this.setNodeState(name, 'guessed');
 
+    let nodeStates = Object.assign({}, nodeStates);
     for (let [name1, name2] of GRAPH.edges) {
       if (name1 == name || name2 == name) {
 	let otherName = name == name1 ? name2 : name1;
-	if (this.getNodeState(otherName) === null) {
-          this.setNodeState(otherName, 'visible');
-	}
+
+        nodeStates[otherName] = 'visible';
       }
     }
+    this.setState({nodeStates: nodeStates});
   }
 
   getNodeState(name) {
     return this.state.nodeStates[name] || null;
-  }
-
-  setNodeState(name, value) {
-    this.setState({
-      nodeStates: Object.assign({}, this.state.nodeStates, { [name]: value })
-    });
   }
 }
 
