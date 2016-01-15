@@ -11,11 +11,11 @@ export function createGraph(edges, width, height) {
     sGraph,
     400.0, // spring stiffness
     400.0, // node repulsion
-    0.5 // damping
+    0.3 // damping
   );
 
   for (let i = 0; i < 100; i++) {
-    sLayout.tick(1);
+    sLayout.tick(0.03);
   }
 
   const bb = sLayout.getBoundingBox();

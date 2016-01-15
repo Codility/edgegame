@@ -52,7 +52,7 @@ const EDGES = [
 ];
 
 
-const WIDTH = 500, HEIGHT = 500;
+const WIDTH = 1000, HEIGHT = 800;
 
 const GRAPH = createGraph(EDGES, WIDTH, HEIGHT);
 
