@@ -23,7 +23,6 @@ export function createGraph(edges, width, height) {
   let nodes = [];
   const size = bb.topright.subtract(bb.bottomleft);
   sLayout.eachNode((sNode, sPoint) => {
-    console.log(sPoint.p);
     const p = sPoint.p.subtract(bb.bottomleft);
     nodes.push({
       name: sNode.data.label,
