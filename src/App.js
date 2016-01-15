@@ -61,22 +61,31 @@ export default class App extends Component {
     super(props);
     this.state = {
       nodeStates: {
-        'technology': 'visible'
+        'technology': 'visible',
+	'computer': 'visible',
       },
       currentName: '',
     };
   }
   render() {
+    let guessNumber = 0, totalNumber = GRAPH.nodes.length;
+    for (let name in this.state.nodeStates)
+      if (this.state.nodeStates[name] == 'guessed')
+	guessNumber += 1;
     return (
-      <div>
-	<div><Board graph={GRAPH} nodeStates={this.state.nodeStates} /></div>
-	<div><input value={this.state.currentName} onChange={this.changeInput.bind(this)} onKeyDown={this.keyDown.bind(this)} /></div>
+      <div style={{textAlign: 'center', fontFamily: 'monospace'}}>
+        <h1>Edge Guessing Game</h1>
+	<div>Your progress: {guessNumber} of {totalNumber}</div>
+	<div style={{margin: '20px'}}><Board graph={GRAPH} nodeStates={this.state.nodeStates} /></div>
+	<div>Enter your guess:&nbsp;
+	  <input value={this.state.currentName} onChange={this.changeInput.bind(this)} onKeyDown={this.keyDown.bind(this)} />
+	</div>
       </div>
     );
   }
 
   changeInput(e) {
-    let currentName = e.target.value;
+    let currentName = e.target.value.toLowerCase();
     this.setState({currentName: currentName});
   }
 
@@ -105,6 +114,10 @@ export default class App extends Component {
       }
     }
     this.setState({nodeStates: nodeStates});
+  }
+
+  componentDidMount() {
+    this.guess('technology');
   }
 }
 
