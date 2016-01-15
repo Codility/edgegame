@@ -60,48 +60,57 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nodeStates: {}
+      nodeStates: {
+        'technology': 'visible'
+      }
     };
-    this.guess('technology');
   }
   render() {
     return (
       <div>
-	<Board graph={GRAPH} />
+	<Board graph={GRAPH} nodeStates={this.state.nodeStates} />
 	<input onChange="" />
       </div>
     );
   }
 
   guess(name) {
-    let found = false;
-    for (let node of GRAPH.nodes) {
-      if (node.name == name && this.state.nodeStates[name] == 'visible') {
-	found = true;
-      }
+    if (!(GRAPH.nodeMap[name] && this.getNodeState(name) == 'visible')) {
+      console.log('not guessing', name);
+      return;
     }
-    if (!found) return;
-    this.state.nodeStates[name] = 'guessed';
 
-    for (let edge of GRAPH.edges) {
-      if (name == edge[0] || name == edge[1]) {
-	let otherName = name == edge[0] ? edge[1] : edge[0];
-	if (this.state.nodeStates[otherName] === null) {
-	  this.state.nodeStates[otherName] = 'visible';
+    console.log('guessing', name);
+    this.setNodeState(name, 'guessed');
+
+    for (let [name1, name2] of GRAPH.edges) {
+      if (name1 == name || name2 == name) {
+	let otherName = name == name1 ? name2 : name1;
+	if (this.getNodeState(otherName) === null) {
+          this.setNodeState(otherName, 'visible');
 	}
       }
     }
   }
 
+  getNodeState(name) {
+    return this.state.nodeStates[name] || null;
+  }
+
+  setNodeState(name, value) {
+    this.setState({
+      nodeStates: Object.assign({}, this.state.nodeStates, { [name]: value })
+    });
+  }
 }
 
 
-function Board({graph}) {
+function Board({graph, nodeStates}) {
   return (
     <svg width={WIDTH} height={WIDTH}>
       <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
       {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
-      {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={this.state.nodeStates[name]} />)}
+      {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} />)}
     </svg>
   );
 }
