@@ -2,36 +2,59 @@ import React, { Component } from 'react';
 import { createGraph } from './graph';
 
 const EDGES = [
-  ['computer', 'keyboard'],
-  ['computer', 'programming'],
-  ['keyboard', 'programming'],
+  ['technology', 'hardware'],
+  ['technology', 'software'],
+  ['technology', 'network'],
+  ['hardware', 'computer'],
+  ['hardware', 'large hadron collider'],
+  ['large hadron collider', 'quantum mechanics'],
+  ['quantum mechanics', 'quantum computer'],
+  ['quantum computer', 'computer'],
+  ['network', 'phone'],
+  ['network', 'internet'],
+  ['phone', 'mobile'],
+  ['computer', 'mobile'],
+  ['internet', 'cloud'],
+  ['internet', 'html'],
+  ['internet', 'communication'],
+  ['phone', 'communication'],
+  ['communication', 'satellite'],
+  ['satellite', 'global positioning system'],
+  ['mobile', 'global positioning system'],
+  ['global positioning system', 'car'],
+  ['elon musk', 'car'],
+  ['elon musk', 'satellite'],
+  ['elon musk', 'engineer'],
+  ['engineer', 'steve wozniak'],
+  ['engineer', 'bill gates'],
+  ['windows', 'bill gates'],
+  ['car', 'windows'],
+  ['windows', 'operating system'],
+  ['linux', 'operating system'],
+  ['operating system', 'software'],
+  ['linux', 'android'],
+  ['android', 'mobile'],
+  ['android', 'google'],
+  ['google', 'internet'],
+  ['android', 'robot'],
+  ['robot', 'technology'],
+  ['software', 'programming'],
+  ['programming', 'keyboard'],
+  ['keyboard', 'computer'],
+  ['keyboard', 'space'],
+  ['space', 'satellite'],
+  ['programming', 'algorithm'],
+  ['programming', 'programming language'],
+  ['programming language', 'cobol'],
+  ['programming language', 'c'],
+  ['c', 'operating system'],
+  ['google', 'car'],
 ];
 
 
 const WIDTH = 500, HEIGHT = 500;
 
 const GRAPH = createGraph(EDGES, WIDTH, HEIGHT);
-
-/* {
-  nodes: [
-    { name: 'technology', x: 250, y: 250 },
-    { name: 'computer', x: 100, y: 250 },
-//    { name: 'large hadron collider', },
-  ],
-  edges: [
-    ['technology', 'computer'],
-/*    ['technology', 'large hadron collider'],
-    ['computer', 'keyboard'],
-    ['computer', 'programming'],
-    ['keyboard', 'programming'],
-    ['programming', 'cobol'],*/
-
-/*    ['steve jobs']
-    ['elon musk']
-    ['nicola tesla']
-  ],
-};
-*/
 
 export default class App extends Component {
   constructor(props) {
