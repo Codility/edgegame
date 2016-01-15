@@ -66,6 +66,8 @@ export default class App extends Component {
       },
       currentName: '',
     };
+    this.changeInput = this.changeInput.bind(this);
+    this.keyDown = this.keyDown.bind(this);
   }
   render() {
     let guessNumber = 0, totalNumber = GRAPH.nodes.length;
@@ -78,7 +80,7 @@ export default class App extends Component {
 	<div>Your progress: {guessNumber} of {totalNumber}</div>
 	<div style={{margin: '20px'}}><Board graph={GRAPH} nodeStates={this.state.nodeStates} /></div>
 	<div>Enter your guess:&nbsp;
-	  <input value={this.state.currentName} onChange={this.changeInput.bind(this)} onKeyDown={this.keyDown.bind(this)} />
+	  <input value={this.state.currentName} onChange={this.changeInput} onKeyDown={this.keyDown} />
 	</div>
       </div>
     );
