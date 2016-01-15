@@ -60,14 +60,37 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      nodeStates: {}
     };
+    this.guess('technology');
   }
   render() {
     return (
       <div>
 	<Board graph={GRAPH} />
+	<input onChange="" />
       </div>
     );
+  }
+
+  guess(name) {
+    let found = false;
+    for (let node of GRAPH.nodes) {
+      if (node.name == name && this.state.nodeStates[name] == 'visible') {
+	found = true;
+      }
+    }
+    if (!found) return;
+    this.state.nodeStates[name] = 'guessed';
+
+    for (let edge of GRAPH.edges) {
+      if (name == edge[0] || name == edge[1]) {
+	let otherName = name == edge[0] ? edge[1] : edge[0];
+	if (this.state.nodeStates[otherName] === null) {
+	  this.state.nodeStates[otherName] = 'visible';
+	}
+      }
+    }
   }
 
 }
@@ -78,7 +101,7 @@ function Board({graph}) {
     <svg width={WIDTH} height={WIDTH}>
       <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
       {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
-      {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} />)}
+      {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={this.state.nodeStates[name]} />)}
     </svg>
   );
 }
@@ -97,11 +120,14 @@ function BoardEdge({name1, name2, nodes}) {
   );
 }
 
-function BoardNode({name, x, y}) {
+function BoardNode({name, x, y, state}) {
   let h = 20, w = name.length * 10, padding = 5;
+  let color = 'white';
+  if (state == 'visible') color = 'yellow';
+  else if (state == 'guessed') color = 'red';
   return (
     <g>
-      <rect x={x-w/2-padding} y={y-h/2} width={w+padding*2} height={h} stroke="black" fill="yellow" strokeWidth="2" />
+      <rect x={x-w/2-padding} y={y-h/2} width={w+padding*2} height={h} stroke="black" fill={color} strokeWidth="2" />
       <text x={x-w/2} y={y+h/4} fontFamily="monospace" fontSize="16">{name}</text>
     </g>
   );
