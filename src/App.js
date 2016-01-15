@@ -117,8 +117,8 @@ class Board extends Component {
     return (
       <svg width={WIDTH} height={HEIGHT}>
         <rect x="0" y="0" width={WIDTH} height={HEIGHT} stroke="black" fill="white" strokeWidth="2"/>
-        {graph.edges.map(([name1, name2]) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} />)}
-        {graph.nodes.map(({name, x, y}) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} />)}
+        {graph.edges.map(([name1, name2], i) => <BoardEdge name1={name1} name2={name2} nodes={graph.nodes} key={i} />)}
+        {graph.nodes.map(({name, x, y}, i) => <BoardNode name={name} x={x} y={y} state={nodeStates[name]} key={i} />)}
       </svg>
     );
   }
